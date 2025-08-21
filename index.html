@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Parceiro Certo - Conectando empresas do setor têxtil no Vale do Itajaí">
+    <meta name="keywords" content="parceiros, empresas, têxtil, fornecedores, Vale do Itajaí">
+    <title>Parceiro Certo - Encontre Empresas Parceiras</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__container">
+            <div class="header__logo">
+                <img src="assets/images/parceirocerto.png" alt="Parceiro Certo - Logo">
+            </div>
+            
+            <nav class="header__nav" role="navigation" aria-label="Navegação principal">
+                <a href="pages/home.html" class="header__nav-link">Início</a>
+                <a href="index.html" class="header__nav-link header__nav-link--active" aria-current="page">Buscar</a>
+                <a href="pages/perfil.html" class="header__nav-link">Meu Perfil</a>
+                <a href="pages/chat.html" class="header__nav-link">Mensagens</a>
+                <a href="pages/indicadores.html" class="header__nav-link">Indicadores</a>
+            </nav>
+            
+            <div class="header__actions">
+                <div class="header__user-info">
+                    <div>Olá, <a href="#" style="text-decoration: none; color: #6b7280;">entre na conta</a> ou</div>
+                    <div><a href="#" style="text-decoration: none; color: #6b7280;"> cadastre-se</a></div>
+                </div>
+                <div class="header__user-avatar" role="button" tabindex="0" aria-label="Menu do usuário">
+                    U
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main main--with-sidebar">
+        <!-- Sidebar com Filtros -->
+        <aside class="sidebar" role="complementary" aria-label="Filtros de busca">
+            <h3 class="sidebar__title">Filtros de Busca</h3>
+            
+            <!-- Busca por texto -->
+            <div class="sidebar__group">
+                <label for="search-input" class="sidebar__label">Buscar</label>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="sidebar__input" 
+                    placeholder="Nome, categoria ou localização..."
+                    aria-describedby="search-help"
+                >
+                <div id="search-help" class="sidebar__range-value">Digite para buscar empresas</div>
+            </div>
+
+            <!-- Filtro por categoria -->
+            <div class="sidebar__group">
+                <label class="sidebar__label">Categoria</label>
+                <div class="sidebar__checkbox-group">
+                    <label class="sidebar__checkbox">
+                        <input type="checkbox" name="category" value="Tinturaria">
+                        <span>Tinturaria</span>
+                    </label>
+                    <label class="sidebar__checkbox">
+                        <input type="checkbox" name="category" value="Estamparia">
+                        <span>Estamparia</span>
+                    </label>
+                    <label class="sidebar__checkbox">
+                        <input type="checkbox" name="category" value="Beneficiamento">
+                        <span>Beneficiamento</span>
+                    </label>
+                    <label class="sidebar__checkbox">
+                        <input type="checkbox" name="category" value="Fornecedor Químico">
+                        <span>Fornecedor Químico</span>
+                    </label>
+                    <label class="sidebar__checkbox">
+                        <input type="checkbox" name="category" value="Fiação">
+                        <span>Fiação</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Filtro por localidade -->
+            <div class="sidebar__group">
+                <label for="location-select" class="sidebar__label">Localidade</label>
+                <select id="location-select" class="sidebar__select">
+                    <option value="">Todas as cidades</option>
+                    <option value="Blumenau, SC">Blumenau, SC</option>
+                    <option value="Brusque, SC">Brusque, SC</option>
+                    <option value="Gaspar, SC">Gaspar, SC</option>
+                    <option value="Indaial, SC">Indaial, SC</option>
+                    <option value="Pomerode, SC">Pomerode, SC</option>
+                </select>
+            </div>
+
+            <!-- Filtro por tamanho -->
+            <div class="sidebar__group">
+                <label for="size-select" class="sidebar__label">Tamanho da Empresa</label>
+                <select id="size-select" class="sidebar__select">
+                    <option value="">Todos os tamanhos</option>
+                    <option value="10-20">10-20 funcionários</option>
+                    <option value="20-50">20-50 funcionários</option>
+                    <option value="50-100">50-100 funcionários</option>
+                    <option value="100-500">100-500 funcionários</option>
+                    <option value="500+">500+ funcionários</option>
+                </select>
+            </div>
+
+            <!-- Filtro por avaliação -->
+            <div class="sidebar__group">
+                <label for="rating-range" class="sidebar__label">Avaliação Mínima</label>
+                <div class="sidebar__range-container">
+                    <input 
+                        type="range" 
+                        id="rating-range" 
+                        class="sidebar__range" 
+                        min="0" 
+                        max="5" 
+                        step="0.5" 
+                        value="0"
+                        aria-describedby="rating-value"
+                    >
+                    <div id="rating-value" class="sidebar__range-value">≥ <span id="rating-display">0.0</span> estrelas</div>
+                </div>
+            </div>
+
+            <!-- Filtro Premium -->
+            <div class="sidebar__group">
+                <label class="sidebar__checkbox">
+                    <input type="checkbox" id="premium-only" name="premium">
+                    <span>Somente empresas Premium</span>
+                </label>
+            </div>
+
+            <!-- Ordenação -->
+            <div class="sidebar__group">
+                <label for="sort-select" class="sidebar__label">Ordenar por</label>
+                <select id="sort-select" class="sidebar__select">
+                    <option value="relevance">Relevância</option>
+                    <option value="rating-desc">Maior avaliação</option>
+                    <option value="rating-asc">Menor avaliação</option>
+                    <option value="name-asc">Nome (A–Z)</option>
+                    <option value="name-desc">Nome (Z–A)</option>
+                </select>
+            </div>
+
+            <!-- Ações -->
+            <div class="sidebar__actions">
+                <button type="button" id="apply-filters" class="btn btn--primary">
+                    Aplicar Filtros
+                </button>
+                <button type="button" id="clear-filters" class="btn btn--outline">
+                    Limpar
+                </button>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <section class="content" role="main">
+            <div class="content__header">
+                <h1 class="content__title">Empresas Disponíveis</h1>
+                <p class="content__subtitle" id="results-count">5 empresas encontradas</p>
+            </div>
+
+            <!-- Grid de Cards -->
+            <div class="cards" id="companies-grid">
+                <!-- Card 1: Tinturaria Blumenau -->
+                <article class="card" 
+                         data-name="Tinturaria Blumenau" 
+                         data-category="Tinturaria" 
+                         data-location="Blumenau, SC" 
+                         data-size="50-100" 
+                         data-rating="4.7" 
+                         data-premium="false">
+                    <div class="card__header">
+                        <div class="card__avatar" aria-hidden="true"><img src="../assets/images/Tinturaria.png" alt="Tinturaria do Vale - Logo"></div>
+                        <h3 class="card__company-name">Tinturaria do Vale</h3>
+                    </div>
+                    
+                    <div class="card__tags">
+                        <span class="tag tag--category">Tinturaria</span>
+                    </div>
+                    
+                    <p class="card__description">
+                        Especializada em tingimento de felpas e tecidos planos, com processos sustentáveis e tecnologia de ponta.
+                    </p>
+                    
+                    <div class="card__info">
+                        <div class="card__info-item">
+                            📍 Blumenau, SC
+                        </div>
+                        <div class="card__info-item">
+                            👥 50-100 funcionários
+                        </div>
+                    </div>
+                    
+                    <div class="card__rating">
+                        <span class="card__stars" aria-label="4.7 de 5 estrelas">⭐⭐⭐⭐⭐</span>
+                        <span class="card__rating-value">4.7</span>
+                    </div>
+                    
+                    <div class="card__actions">
+                        <button class="btn btn--primary btn--small">Ver Detalhes</button>
+                        <button class="btn btn--outline btn--small">Conectar</button>
+                    </div>
+                </article>
+
+                <!-- Card 2: QuimTex Fornecedora -->
+                <article class="card" 
+                         data-name="QuimTex Fornecedora" 
+                         data-category="Fornecedor Químico" 
+                         data-location="Gaspar, SC" 
+                         data-size="20-50" 
+                         data-rating="4.6" 
+                         data-premium="false">
+                    <div class="card__header">
+                        <div class="card__avatar" aria-hidden="true"><img src="../assets/images/Química.png" alt="Parceiro Certo - Logo"></div>
+                        <h3 class="card__company-name">QuimTex Fornecedora</h3>
+                    </div>
+                    
+                    <div class="card__tags">
+                        <span class="tag tag--category">Fornecedor Químico</span>
+                    </div>
+                    
+                    <p class="card__description">
+                        Distribuidora de corantes, produtos auxiliares e químicos para beneficiamento têxtil com qualidade garantida.
+                    </p>
+                    
+                    <div class="card__info">
+                        <div class="card__info-item">
+                            📍 Gaspar, SC
+                        </div>
+                        <div class="card__info-item">
+                            👥 20-50 funcionários
+                        </div>
+                    </div>
+                    
+                    <div class="card__rating">
+                        <span class="card__stars" aria-label="4.6 de 5 estrelas">⭐⭐⭐⭐⭐</span>
+                        <span class="card__rating-value">4.6</span>
+                    </div>
+                    
+                    <div class="card__actions">
+                        <button class="btn btn--primary btn--small">Ver Detalhes</button>
+                        <button class="btn btn--outline btn--small">Conectar</button>
+                    </div>
+                </article>
+
+                <!-- Card 3: Estamparia Vale -->
+                <article class="card" 
+                         data-name="Estamparia Vale" 
+                         data-category="Estamparia" 
+                         data-location="Brusque, SC" 
+                         data-size="100-500" 
+                         data-rating="4.8" 
+                         data-premium="true">
+                    <div class="card__header">
+                        <div class="card__avatar" aria-hidden="true"><img src="../assets/images/Estamparia.png" alt="Lucastamparia - Logo"></div>
+                        <h3 class="card__company-name">Lucastamparia</h3>
+                    </div>
+                    
+                    <div class="card__tags">
+                        <span class="tag tag--category">Estamparia</span>
+                        <span class="tag tag--premium">Premium</span>
+                    </div>
+                    
+                    <p class="card__description">
+                        Estamparia têxtil com tecnologia digital e rotativa, atendendo grandes confecções da região com excelência.
+                    </p>
+                    
+                    <div class="card__info">
+                        <div class="card__info-item">
+                            📍 Brusque, SC
+                        </div>
+                        <div class="card__info-item">
+                            👥 100-500 funcionários
+                        </div>
+                    </div>
+                    
+                    <div class="card__rating">
+                        <span class="card__stars" aria-label="4.8 de 5 estrelas">⭐⭐⭐⭐⭐</span>
+                        <span class="card__rating-value">4.8</span>
+                    </div>
+                    
+                    <div class="card__actions">
+                        <button class="btn btn--primary btn--small">Ver Detalhes</button>
+                        <button class="btn btn--outline btn--small">Conectar</button>
+                    </div>
+                </article>
+
+                <!-- Card 4: Fiação Indaial -->
+                <article class="card" 
+                         data-name="Fiação Indaial" 
+                         data-category="Fiação" 
+                         data-location="Indaial, SC" 
+                         data-size="50-100" 
+                         data-rating="4.5" 
+                         data-premium="false">
+                    <div class="card__header">
+                        <div class="card__avatar" aria-hidden="true"><img src="../assets/images/fiação.png" alt="Fiação Indaial - Logo"></div>
+                        <h3 class="card__company-name">Fiação Indaial</h3>
+                    </div>
+                    
+                    <div class="card__tags">
+                        <span class="tag tag--category">Fiação</span>
+                    </div>
+                    
+                    <p class="card__description">
+                        Produção de fios de algodão e mistos para confecção e malharias da região com tradição e qualidade.
+                    </p>
+                    
+                    <div class="card__info">
+                        <div class="card__info-item">
+                            📍 Indaial, SC
+                        </div>
+                        <div class="card__info-item">
+                            👥 50-100 funcionários
+                        </div>
+                    </div>
+                    
+                    <div class="card__rating">
+                        <span class="card__stars" aria-label="4.5 de 5 estrelas">⭐⭐⭐⭐⭐</span>
+                        <span class="card__rating-value">4.5</span>
+                    </div>
+                    
+                    <div class="card__actions">
+                        <button class="btn btn--primary btn--small">Ver Detalhes</button>
+                        <button class="btn btn--outline btn--small">Conectar</button>
+                    </div>
+                </article>
+
+                <!-- Card 5: Beneficiadora Pomerode -->
+                <article class="card" 
+                         data-name="Beneficiadora Pomerode" 
+                         data-category="Beneficiamento" 
+                         data-location="Pomerode, SC" 
+                         data-size="20-50" 
+                         data-rating="4.9" 
+                         data-premium="true">
+                    <div class="card__header">
+                        <div class="card__avatar" aria-hidden="true"><img src="../assets/images/Beneficiamento.png" alt="Beneficiamento Pomerode - Logo"></div>
+                        <h3 class="card__company-name">Beneficiadora Pomerode</h3>
+                    </div>
+                    
+                    <div class="card__tags">
+                        <span class="tag tag--category">Beneficiamento</span>
+                        <span class="tag tag--premium">Premium</span>
+                    </div>
+                    
+                    <p class="card__description">
+                        Beneficiamento têxtil com foco em acabamentos especiais e processos ecologicamente corretos para o mercado de moda.
+                    </p>
+                    
+                    <div class="card__info">
+                        <div class="card__info-item">
+                            📍 Pomerode, SC
+                        </div>
+                        <div class="card__info-item">
+                            👥 20-50 funcionários
+                        </div>
+                    </div>
+                    
+                    <div class="card__rating">
+                        <span class="card__stars" aria-label="4.9 de 5 estrelas">⭐⭐⭐⭐⭐</span>
+                        <span class="card__rating-value">4.9</span>
+                    </div>
+                    
+                    <div class="card__actions">
+                        <button class="btn btn--primary btn--small">Ver Detalhes</button>
+                        <button class="btn btn--outline btn--small">Conectar</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__section">
+                <h4>Sobre o Parceiro Certo</h4>
+                <p>Conectando as melhores empresas do setor têxtil no Vale do Itajaí. Encontre fornecedores, parceiros e oportunidades de negócio de forma rápida e eficiente.</p>
+            </div>
+            <div class="footer__section">
+                <h4>Navegação</h4>
+                <p><a href="pages/home.html">Início</a></p>
+                <p><a href="index.html">Buscar Empresas</a></p>
+                <p><a href="pages/perfil.html">Meu Perfil</a></p>
+                <p><a href="pages/chat.html">Mensagens</a></p>
+                <p><a href="pages/indicadores.html">Indicadores</a></p>
+            </div>
+            <div class="footer__section">
+                <h4>Contato</h4>
+                <p>Email: contato@parceirocerto.com</p>
+                <p>Telefone: (47) 99999-9999</p>
+                <p>Endereço: Rua Exemplo, 123, Blumenau - SC</p>
+            </div>
+            <div class="footer__section">
+                <h4>Redes Sociais</h4>
+                <div class="footer__social-links">
+                    <p><a href="#">LinkedIn</a></p>
+                    <p><a href="#">Facebook</a></p>
+                    <p><a href="#">Instagram</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>&copy; 2023 Parceiro Certo. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/mobile-filters.js"></script>
+</body>
+</html>

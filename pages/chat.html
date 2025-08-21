@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parceiro Certo - Mensagens</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Estilos específicos para a página de chat */
+        .chat-container {
+            display: flex;
+            height: 70vh; /* Altura para simular um chat */
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            background-color: var(--background);
+        }
+
+
+        .chat-sidebar__header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+
+        .chat-list__item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background-color var(--transition-fast);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .chat-list__item:hover {
+            background-color: var(--secondary);
+        }
+
+        .chat-list__item--active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .chat-list__item--active .chat-list__name,
+        .chat-list__item--active .chat-list__last-message {
+            color: white;
+        }
+
+        .chat-list__avatar img {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: var(--primary-hover);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .chat-list__info {
+            flex-grow: 1;
+        }
+
+        .chat-list__name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chat-list__last-message {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-main__header {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            background-color: var(--background);
+        }
+
+        .chat-main__name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse; /* Para que as mensagens mais recentes fiquem embaixo */
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.4;
+        }
+
+        .message-bubble--sent {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: var(--radius-sm); /* Borda diferente para a última mensagem */
+        }
+
+        .message-bubble--received {
+            background-color: var(--secondary);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: var(--radius-sm); /* Borda diferente para a última mensagem */
+        }
+
+        .chat-input-area {
+            padding: var(--spacing-md);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: var(--spacing-sm);
+            background-color: var(--background);
+        }
+
+        .chat-input-area__input {
+            flex-grow: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .chat-input-area__button {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background-color var(--transition-fast);
+        }
+
+        .chat-input-area__button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .chat-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__container">
+            <div class="header__logo">
+                <img src="../assets/images/parceirocerto.png" alt="Parceiro Certo - Logo">
+            </div>
+            
+            <nav class="header__nav" role="navigation" aria-label="Navegação principal">
+                <a href="home.html" class="header__nav-link">Início</a>
+                <a href="../index.html" class="header__nav-link">Buscar</a>
+                <a href="perfil.html" class="header__nav-link">Meu Perfil</a>
+                <a href="chat.html" class="header__nav-link header__nav-link--active" aria-current="page">Mensagens</a>
+                <a href="indicadores.html" class="header__nav-link">Indicadores</a>
+            </nav>
+            
+            <div class="header__actions">
+                <div class="header__user-info">
+                    <div>Olá, <a href="#" style="text-decoration: none; color: #6b7280;">entre na conta</a> ou</div>
+                    <div><a href="#" style="text-decoration: none; color: #6b7280;"> cadastre-se</a></div>
+                </div>
+                <div class="header__user-avatar" role="button" tabindex="0" aria-label="Menu do usuário">
+                    U
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main main--full-width">
+        <section class="content">
+            <div class="content__header">
+                <h1 class="content__title">Suas Mensagens</h1>
+                <p class="content__subtitle">Converse com seus parceiros de negócio.</p>
+            </div>
+            
+            <div class="chat-container">
+                <aside class="chat-sidebar">
+                    <h3 class="chat-sidebar__header">Conversas</h3>
+                    <div class="chat-list">
+                        <div class="chat-list__item chat-list__item--active">
+                            <div class="chat-list__avatar"><img src="../assets/images/Tinturaria.png" alt="Tinturaria-vale-logo"></div>
+                            <div class="chat-list__info">
+                                <div class="chat-list__name">Tinturaria do Vale</div>
+                                <div class="chat-list__last-message">Olá! Gostaria de saber mais...</div>
+                            </div>
+                        </div>
+                        <div class="chat-list__item">
+                            <div class="chat-list__avatar"><img src="../assets/images/Química.png" alt="Quimitex - Logo"></div>
+                            <div class="chat-list__info">
+                                <div class="chat-list__name">QuimTex Fornecedora</div>
+                                <div class="chat-list__last-message">Recebemos sua solicitação.</div>
+                            </div>
+                        </div>
+                        <div class="chat-list__item">
+                            <div class="chat-list__avatar"><img src="../assets/images/Estamparia.png" alt="Lucastamparia - Logo"></div>
+                            <div class="chat-list__info">
+                                <div class="chat-list__name">Lucastamparia</div>
+                                <div class="chat-list__last-message">Ok, obrigado!</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="chat-main">
+                    <div class="chat-main__header">
+                        <div class="chat-list__avatar"><img src="../assets/images/Tinturaria.png" alt="Parceiro Certo - Logo"></div>
+                        <h4 class="chat-main__name">Tinturaria do Vale</h4>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message-bubble message-bubble--received">
+                            Perfeito! Estamos à disposição para qualquer dúvida.
+                        </div>
+                        <div class="message-bubble message-bubble--sent">
+                            Entendido! Agradeço o retorno rápido.
+                        </div>
+                        <div class="message-bubble message-bubble--received">
+                            Olá! Sim, podemos fornecer amostras. Qual tipo de tecido você precisa?
+                        </div>
+                        <div class="message-bubble message-bubble--sent">
+                            Olá! Gostaria de saber mais sobre seus serviços de tingimento e se vocês fornecem amostras.
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea class="chat-input-area__input" placeholder="Digite sua mensagem..."></textarea>
+                        <button class="chat-input-area__button">Enviar</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer__container">
+            <div class="footer__section">
+                <h4>Parceiro Certo</h4>
+                <p>Conectando empresas e criando oportunidades de negócios no Vale do Itajaí com tecnologia e inovação.</p>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Contato</h4>
+                <p>Email: contato@parceirocerto.com</p>
+                <p>Telefone: (47) 99999-9999</p>
+                <p>Endereço: Rua Exemplo, 123 - Brusque/SC</p>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Links Úteis</h4>
+                <div class="footer__social-links">
+                    <a href="home.html">Início</a>
+                    <a href="../index.html">Buscar</a>
+                    <a href="perfil.html">Meu Perfil</a>
+                    <a href="chat.html">Mensagens</a>
+                    <a href="indicadores.html">Indicadores</a>
+                </div>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Siga-nos</h4>
+                <div class="footer__social-links">
+                    <a href="#" aria-label="Facebook">🔵 Facebook</a>
+                    <a href="#" aria-label="Instagram">📸 Instagram</a>
+                    <a href="#" aria-label="LinkedIn">💼 LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer__bottom">
+            <p>© 2025 Parceiro Certo - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

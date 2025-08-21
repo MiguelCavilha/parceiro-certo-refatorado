@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores de Compras - Parceiro Certo</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Variáveis CSS adicionais */
+        :root {
+            --primary-light: #dbeafe;
+            --primary-dark: #1e40af;
+            --success: #059669;
+            --warning: #d97706;
+            --radius-xl: 12px;
+        }
+
+        /* Estilos específicos para a página de indicadores - VERSÃO MELHORADA */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: linear-gradient(90deg, var(--primary-light) 0%, var(--secondary) 100%);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .dashboard-title::before {
+            content: "📊";
+            font-size: 2rem;
+        }
+
+        .dashboard-actions .btn-primary {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 1rem;
+            border-radius: var(--radius-lg);
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .dashboard-actions .btn-primary::before {
+            content: "⚙️";
+        }
+        
+        .dashboard-actions .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: var(--spacing-xl);
+            padding: var(--spacing-lg) 0;
+        }
+
+        .indicator-card {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            min-width: 0;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .indicator-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .indicator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .indicator-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-lg);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .indicator-card h3::before {
+            font-size: 1.5rem;
+        }
+
+        .indicator-card:nth-child(1) h3::before { content: "📈"; }
+        .indicator-card:nth-child(2) h3::before { content: "🏭"; }
+        .indicator-card:nth-child(3) h3::before { content: "👥"; }
+        .indicator-card:nth-child(4) h3::before { content: "📚"; }
+        .indicator-card:nth-child(5) h3::before { content: "💸"; }
+        .indicator-card:nth-child(6) h3::before { content: "⏱️"; }
+        .indicator-card:nth-child(7) h3::before { content: "📦"; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: var(--spacing-md);
+            background: #fff;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+            table-layout: fixed;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+            text-align: left;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .data-table th {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .data-table td {
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .positive {
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .data-table .positive::before {
+            content: "↑";
+        }
+
+        .data-table .negative {
+            color: var(--danger);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .data-table .negative::before {
+            content: "↓";
+        }
+
+        .main-indicators-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .main-indicators-list li {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding: var(--spacing-sm);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            transition: all var(--transition-fast);
+        }
+
+        .main-indicators-list li:hover {
+            background: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .main-indicators-list li strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-size: 1rem;
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(120deg, var(--surface) 70%, var(--secondary) 100%);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-fast);
+        }
+
+        .chart-placeholder:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chart-placeholder::before {
+            content: "📈";
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Badges para valores importantes */
+        .value-badge {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-full);
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Media queries para responsividade */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+                padding: var(--spacing-lg);
+            }
+            
+            .dashboard-title {
+                font-size: 1.5rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .indicator-card {
+                padding: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .indicator-card {
+                padding: var(--spacing-md);
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.9rem;
+            }
+            
+            .indicator-card h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__container">
+            <div class="header__logo">
+                <img src="../assets/images/parceirocerto.png" alt="Parceiro Certo - Logo">
+            </div>
+            
+            <nav class="header__nav" role="navigation" aria-label="Navegação principal">
+                <a href="home.html" class="header__nav-link">Início</a>
+                <a href="../index.html" class="header__nav-link">Buscar</a>
+                <a href="perfil.html" class="header__nav-link">Meu Perfil</a>
+                <a href="chat.html" class="header__nav-link">Mensagens</a>
+                <a href="indicadores.html" class="header__nav-link header__nav-link--active" aria-current="page">Indicadores</a>
+            </nav>
+            
+            <div class="header__actions">
+                <div class="header__user-info">
+                    <div>Olá, <a href="#" style="text-decoration: none; color: #6b7280;">entre na conta</a> ou</div>
+                    <div><a href="#" style="text-decoration: none; color: #6b7280;"> cadastre-se</a></div>
+                </div>
+                <div class="header__user-avatar" role="button" tabindex="0" aria-label="Menu do usuário">
+                    U
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main main--full-width">
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">Dashboard de Suprimentos - Têxtil</h2>
+            <div class="dashboard-actions">
+                <button class="btn btn--primary">Configurar paineis e filtros</button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="indicator-card">
+                <h3>Visão Geral de Compras (Mês Atual)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Indicador</th>
+                            <th>Valor</th>
+                            <th>Variação (vs. Mês Ant.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Gasto (Spend)</td>
+                            <td>R$ 485.230,00</td>
+                            <td class="negative">+5,8%</td>
+                        </tr>
+                        <tr>
+                            <td>Cost Savings (Economia)</td>
+                            <td>R$ 22.150,00</td>
+                            <td class="positive">+12,5%</td>
+                        </tr>
+                        <tr>
+                            <td>On-Time Delivery (OTD)</td>
+                            <td>92,4%</td>
+                            <td class="positive">+1,9%</td>
+                        </tr>
+                        <tr>
+                            <td>Qualidade (Material Aprovado)</td>
+                            <td>98,1%</td>
+                            <td class="negative">-0,5%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="indicator-card">
+                <h3>Desempenho de Fornecedores (Top 5)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Fornecedor</th>
+                            <th>OTD %</th>
+                            <th>Qualidade %</th>
+                            <th>Lead Time (dias)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Malharia Confiança</td>
+                            <td class="positive">98%</td>
+                            <td class="positive">99,5%</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td>Fios do Vale Ltda.</td>
+                            <td class="positive">95%</td>
+                            <td class="positive">99,0%</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>Aviamentos & Cia</td>
+                            <td class="negative">88%</td>
+                            <td class="positive">97,5%</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>Tinturaria Cor Forte</td>
+                            <td class="positive">94%</td>
+                            <td class="negative">96,0%</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>Zíper Master</td>
+                            <td class="negative">85%</td>
+                            <td class="positive">99,8%</td>
+                            <td>18</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="indicator-card">
+                <h3>Análise de Terceirização (Facções)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Parceiro (Facção)</th>
+                            <th>Custo/Peça</th>
+                            <th>Prazo Entrega %</th>
+                            <th>Retrabalho %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Costura Rápida</td>
+                            <td>R$ 4,80</td>
+                            <td class="positive">99%</td>
+                            <td class="positive">0,5%</td>
+                        </tr>
+                        <tr>
+                            <td>Oficina da Moda</td>
+                            <td>R$ 5,20</td>
+                            <td class="positive">95%</td>
+                            <td class="negative">2,1%</td>
+                        </tr>
+                        <tr>
+                            <td>Corte & Arte</td>
+                            <td>R$ 4,50</td>
+                            <td class="negative">89%</td>
+                            <td class="positive">1,2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="indicator-card">
+                <h3>Glossário de Indicadores de Compras</h3>
+                <ul class="main-indicators-list">
+                    <li><strong>Spend:</strong> Valor total gasto em compras de materiais e serviços em um período.</li>
+                    <li><strong>Cost Savings:</strong> Economia gerada através de negociações, troca de fornecedor ou otimização de processos.</li>
+                    <li><strong>On-Time Delivery (OTD):</strong> Percentual de pedidos entregues pelos fornecedores dentro do prazo acordado.</li>
+                    <li><strong>Qualidade:</strong> Percentual de matéria-prima recebida que atende aos padrões de qualidade e é aprovada sem a necessidade de devolução ou retrabalho.</li>
+                    <li><strong>Lead Time:</strong> Tempo total desde a colocação de um pedido de compra até o recebimento do material.</li>
+                    <li><strong>Retrabalho %:</strong> Percentual de peças ou serviços de parceiros terceirizados que precisaram ser refeitos por não atenderem à qualidade.</li>
+                </ul>
+            </div>
+            <div class="indicator-card">
+                <h3>Spend por Categoria de Material</h3>
+                <div class="chart-placeholder">Gráfico de Pizza - Spend por Categoria</div>
+            </div>
+            <div class="indicator-card">
+                <h3>Evolução do On-Time Delivery (Últimos 6 meses)</h3>
+                <div class="chart-placeholder">Gráfico de Linhas - OTD Mensal</div>
+            </div>
+            <div class="indicator-card">
+                <h3>Nível de Estoque (Principais Matérias-Primas)</h3>
+                <div class="chart-placeholder">Gráfico de Barras - Estoque vs. Mínimo/Máximo</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer__container">
+            <div class="footer__section">
+                <h4>Parceiro Certo</h4>
+                <p>Conectando empresas e criando oportunidades de negócios no Vale do Itajaí com tecnologia e inovação.</p>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Contato</h4>
+                <p>Email: contato@parceirocerto.com</p>
+                <p>Telefone: (47) 99999-9999</p>
+                <p>Endereço: Rua Exemplo, 123 - Brusque/SC</p>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Links Úteis</h4>
+                <div class="footer__social-links">
+                    <a href="home.html">Início</a>
+                    <a href="../index.html">Buscar</a>
+                    <a href="perfil.html">Meu Perfil</a>
+                    <a href="chat.html">Mensagens</a>
+                    <a href="indicadores.html">Indicadores</a>
+                </div>
+            </div>
+            
+            <div class="footer__section">
+                <h4>Siga-nos</h4>
+                <div class="footer__social-links">
+                    <a href="#" aria-label="Facebook">🔵 Facebook</a>
+                    <a href="#" aria-label="Instagram">📸 Instagram</a>
+                    <a href="#" aria-label="LinkedIn">💼 LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer__bottom">
+            <p>© 2025 Parceiro Certo - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
